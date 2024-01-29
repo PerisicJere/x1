@@ -8,10 +8,13 @@ int subestOfThree();
 int insertionSort(int[]);
 int gcd(int, int);
 int main(){
-    smallestNumberInList();
-    subestOfThree();
-    insertionSort(array);
-    gcd(15,130);
+    //smallestNumberInList();
+   // subestOfThree();
+   // insertionSort(array);
+   // gcd(15,130);
+   int x = 16;
+   int* px = &x;
+   printf("%d",px);
     return 0;
 }
 
@@ -129,3 +132,4 @@ int gcd(int x, int y){
     printf("%d\n", GCD);
     
 }
+
