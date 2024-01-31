@@ -1,105 +1,94 @@
+/*
+@author: Jere Perisic
+@version: 30/1/2024
+*/
+
 #include <stdio.h> 
 #include <stdbool.h>
 
-int array[] = {295, 95, 299, 132, 100, 270, 274, 137, 124, 178, 289, 143, 234, 117, 24, 107, 148, 140, 33, 82, 201, 198, 19, 165, 21, 151, 292, 218, 283, 287, 45, 190, 29, 70, 75, 90, 84, 47, 96, 224, 171, 228, 51, 225, 238, 125, 91, 159, 25, 201};
-unsigned const arrSize = (sizeof(array)/sizeof(array[0]));
-int smallestNumberInList();
+int array[] = {295, 95, 299, 132, 11, 270, 274, 137, 124, 15, 289, 72}; // global
+unsigned const int arrSize = (sizeof(array)/sizeof(array[0])); // read-only variable
+
+
+int smallestNumberInList(int);
 int subestOfThree();
 int insertionSort(int[]);
 int gcd(int, int);
+
 int main(){
-    //smallestNumberInList();
-   // subestOfThree();
-   // insertionSort(array);
-   // gcd(15,130);
-   int x = 16;
-   int* px = &x;
-   printf("%d",px);
+    printf("First Algorithm\n");
+    smallestNumberInList(5);
+
+    printf("\n");
+    printf("Second Algorithm\n");
+    subestOfThree();
+
+    printf("\n");
+    printf("Thrid Algorithm\n"); 
+    insertionSort(array);
+
+    printf("\n");
+    printf("Fourth Algorithm\n");
+    gcd(15,130);
     return 0;
 }
-
-
-/*
-Linear searching unsorted array to find smallest value in the same.
-Thought process, when traversing the array once we encouter smallest value, replace the variable smallInt with it.
-smallInt can't be default 0 because then it would already be the smalles value. 
-But if the array is sorted, or not we can set smallInt to be the first value. 
-*/
-int smallestNumberInList(){
-    int smallInt = array[0];
-    for(int i = 1; i<arrSize;i++){
-        if(array[i]<smallInt){
-            smallInt = array[i];
-        }
-    }
-    printf("%d\n",smallInt);
-}
-/*
-Traverse through the array, store in subarray after three values are stored print them, easy.
-I will explain with inline documentation
-*/
-int printSubsetArray(int printArr[]){
-    printf("[");
-    for(int i = 0; i <= 2; i++){
-        if(i == 0 || i == 1){
-        printf("%d, ",printArr[i]);
-        }else if (i==2)
-        {
-        printf("%d",printArr[i]);
-        }
-    }
-    printf("]");
-    return 0;
-}
-int printRestOfArray(int restArr[], int left){
-    if((arrSize-left) == 1){
-            printf("[%d]",restArr[0]);
-        }
-    if((arrSize-left) == 2){
-        for(int i = left; i < arrSize; i++)
-        {
-            if((arrSize-i) == 2){
-                printf("[%d, ",restArr[0]);
-            }else if ((arrSize-i) == 1)
-            {
-                printf("%d]\n",restArr[1]);
-            }
-            
-        }
-    }
-    
-    return 0;
-}
-
-int subestOfThree(){
-    int subset[3] = {};
-    int increment = 0;
-    for(int i = 0; i< (arrSize)/3;i++){ // Outer for-loop traverses the array, we divide array size with 3 since we are printing subset of 3 elements
-        for(int j =  0;j<3;j++){
-            subset[j]=array[increment];
-            increment++; // increment in inner loop, this is main reason why outer loop is divided by 3
-        }
-        printSubsetArray(subset); // call to function to print subsets 
-        
-    }
-    if(arrSize%3 != 0){ // not all arrays will be subset of 3 elements
-        printRestOfArray(array, increment);
-    }
-}
-
 /*
 Print array method, it is what it is.
 */
-int printArray(int prtArr[]){
+void printArray(int prtArr[], int size){
     printf("[");
-    for(int i = 0; i< arrSize;i++){
-        if((arrSize-i)==1){
+    for(int i = 0; i< size;i++){
+        if((size-i)==1){
             printf("%d]\n",prtArr[i]);
         }else{
             printf("%d, ",prtArr[i]);
         }
     }
 }
+
+/*
+My thought was loop over the array and write element in another array, do it for m times.
+In the end print the array. Simple but it needs to decrement and reassign values.
+*/
+int smallestNumberInList(int m){
+    int subArrOfSmallInt[m];  
+    int size = arrSize; // I wanted to experiment with "const" so I declared arrSize as global read-only value
+    for (int i = 0; i < m; i++) { // outer loop
+        int smallInt = array[0];
+        int index = 0;
+
+        for (int j = 1; j < size; j++) { // inner loop
+            if (array[j] < smallInt) {
+                smallInt = array[j]; // assign new smallest value
+                index = j; // assign index so we can remove it from array
+            }
+        }
+
+        subArrOfSmallInt[i] = smallInt; // write in sub array
+        array[index] = array[size - 1]; // remove smallest from array
+        size--; // decrement size to avoid segmentation fault
+    }
+    printArray(subArrOfSmallInt, (sizeof(subArrOfSmallInt)/sizeof(subArrOfSmallInt[0])));
+
+  
+} 
+/*
+I think since we know that it is a subset of three this is sufficient.
+*/
+int subestOfThree(){
+    char charArr[] = {'a','b','c','d','e'};
+    int charArrSize = (sizeof(charArr) / sizeof(charArr[0]));
+    int count = 1;
+    for (int i =0;i<charArrSize;i++) { // this one iterates over first char
+        for(int j = i+1;j<charArrSize;j++){ // changes second char i+1 to make it unique
+            for(int l = j+1;l<charArrSize;l++){ // changes third char j+1=(i+1)+1 to make it unique
+                printf("Subset %d: {%c, %c, %c}\n", count, charArr[i],charArr[j],charArr[l]); // for each iteration print, simple
+                count++; // just so output is prettier
+            }
+        }
+    }
+}
+
 /*
 Loop an array and find number at [j] position, and if it's bigger then number at [j+1] position.
 Sort it.
@@ -114,22 +103,22 @@ int insertionSort(int arr[]){
         }
         arr[j+1] = curr;
    }
-    printArray(arr);
+    printArray(arr,arrSize);
 }
 /*
 Find bigger number and start decrementing, once both numbers don't have reminder, we have found gcd.
 After that is achieved we break a loop.
 */
 int gcd(int x, int y){
-    int n = (x > y) ? x : y;
+    int n = (x > y) ? x : y; // finding which number is greater
     unsigned int GCD = 0;
-    for(int i = n; i>0;i--){
-        if((x%i==0) && (y%i==0)){
+    for(int i = n; i>0;i--){ // decrement loop
+        if((x%i==0) && (y%i==0)){ // when condition is meet break loop
             GCD = i;
             break;
         }
     }
-    printf("%d\n", GCD);
+    printf("Greatest common divisor: {%d}\n", GCD);
     
 }
 
