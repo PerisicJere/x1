@@ -5,7 +5,7 @@
 ## Version 
 - January 30th, 2024
 
-'''bash
+```bash
 First Algorithm
 [11, 15, 72, 95, 124]
 
@@ -26,4 +26,4 @@ Thrid Algorithm
 
 Fourth Algorithm
 Greatest common divisor: {5}
-'''
+```
