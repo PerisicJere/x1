@@ -5,6 +5,9 @@
 ## Version 
 - January 30th, 2024
 
+
+## Output sample 
+
 ```bash
 First Algorithm
 [11, 15, 72, 95, 124]
